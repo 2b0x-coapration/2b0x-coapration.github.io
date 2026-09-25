@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="2B0X — a lightweight Virtual OS Launcher for Linux.">
+  <title>2B0X — Virtual OS Launcher</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b14;
+      --panel: rgba(19, 25, 43, .8);
+      --text: #f5f7ff;
+      --muted: #aab4d0;
+      --accent: #8b7cff;
+      --accent-2: #5eead4;
+      --border: rgba(255,255,255,.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 15% 10%, #29205e 0, transparent 38%), radial-gradient(circle at 90% 0%, #0b5a63 0, transparent 32%), var(--bg);
+    }
+    a { color: inherit; }
+    .wrap { width: min(1100px, calc(100% - 40px)); margin: auto; }
+    header { padding: 28px 0; display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 800; letter-spacing: .08em; }
+    .badge { color: var(--accent-2); font-size: .82rem; border: 1px solid rgba(94,234,212,.35); padding: 7px 11px; border-radius: 999px; }
+    main { padding: 72px 0 90px; }
+    .hero { max-width: 780px; }
+    .eyebrow { color: var(--accent-2); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .78rem; }
+    h1 { font-size: clamp(3.4rem, 10vw, 7.2rem); line-height: .92; margin: 18px 0 24px; letter-spacing: -.08em; }
+    .lede { color: var(--muted); font-size: clamp(1.1rem, 2vw, 1.35rem); line-height: 1.65; max-width: 680px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin: 32px 0 70px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 12px; text-decoration: none; font-weight: 750; border: 1px solid var(--border); transition: transform .2s, border-color .2s; }
+    .button:hover { transform: translateY(-2px); border-color: var(--accent-2); }
+    .primary { background: linear-gradient(135deg, var(--accent), #b06cff); border: 0; }
+    .secondary { background: rgba(255,255,255,.06); }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 22px; padding: clamp(22px, 5vw, 42px); backdrop-filter: blur(16px); }
+    .card h2 { margin-top: 0; font-size: 1.65rem; }
+    #readme { color: var(--muted); line-height: 1.75; }
+    #readme h1, #readme h2, #readme h3 { color: var(--text); letter-spacing: -.02em; line-height: 1.2; margin-top: 1.6em; }
+    #readme h1 { font-size: 2rem; }
+    #readme h2 { font-size: 1.4rem; }
+    #readme h3 { font-size: 1.1rem; }
+    #readme p { margin: .7em 0 1.1em; }
+    #readme ul { padding-left: 1.4em; }
+    #readme li { margin: .45em 0; }
+    #readme code { color: #d9d5ff; background: rgba(139,124,255,.15); border-radius: 5px; padding: .12em .35em; }
+    #readme pre { overflow-x: auto; background: #080b14; border: 1px solid var(--border); padding: 16px; border-radius: 10px; }
+    #readme pre code { background: transparent; padding: 0; }
+    .error { color: #ffb4b4; }
+    footer { color: var(--muted); padding: 28px 0 40px; font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">2B0X</div>
+      <div class="badge">v1.0 beta</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Virtual OS Launcher</div>
+        <h1>Run your<br>world.</h1>
+        <p class="lede">A lightweight Linux desktop app that turns ISO files, ZIP archives, and folders into launchable virtual machines with QEMU/KVM.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/2b0x-coapration/2b0x" target="_blank" rel="noopener">Download 2B0X ↗</a>
+          <a class="button secondary" href="https://github.com/2b0x-coapration/2b0x#readme" target="_blank" rel="noopener">View source ↗</a>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="about-title">
+        <h2 id="about-title">About 2B0X</h2>
+        <div id="readme" aria-live="polite">Loading the latest explanation from the 2B0X README…</div>
+      </section>
+    </main>
+
+    <footer>Built for Linux · <a href="https://github.com/2b0x-coapration/2b0x" target="_blank" rel="noopener">github.com/2b0x-coapration/2b0x</a></footer>
+  </div>
+
+  <script>
+    // Keep the product explanation in sync with the 2B0X repository README.
+    const readmeUrl = 'https://raw.githubusercontent.com/2b0x-coapration/2b0x/main/README.md';
+    const target = document.getElementById('readme');
+
+    function markdownToHtml(markdown) {
+      const escaped = markdown.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const blocks = escaped.split(/```/);
+      return blocks.map((block, index) => {
+        if (index % 2 === 1) return `<pre><code>${block.replace(/^\w+\n/, '')}</code></pre>`;
+        let html = block
+          .replace(/^### (.*)$/gm, '<h3>$1</h3>')
+          .replace(/^## (.*)$/gm, '<h2>$1</h2>')
+          .replace(/^# (.*)$/gm, '<h1>$1</h1>')
+          .replace(/^[-*] (.*)$/gm, '<li>$1</li>')
+          .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+          .replace(/^(?!<[h ul])/gm, '<p>')
+          .replace(/(?!>)$/gm, '</p>');
+        return html;
+      }).join('');
+    }
+
+    fetch(readmeUrl)
+      .then(response => { if (!response.ok) throw new Error('README unavailable'); return response.text(); })
+      .then(markdown => { target.innerHTML = markdownToHtml(markdown); })
+      .catch(() => { target.innerHTML = '<p class="error">The README could not be loaded right now. <a href="https://github.com/2b0x-coapration/2b0x#readme">Read it on GitHub ↗</a></p>'; });
+  </script>
+</body>
+</html>
